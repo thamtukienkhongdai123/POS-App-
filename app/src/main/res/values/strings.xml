@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">POS</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="edit_voucher">Chỉnh sửa mã giảm giá</string>
+    <string name="delete_voucher">Xóa mã giảm giá</string>
+    <string name="add_product">Thêm sản phẩm</string>
+    <string name="edit_product">Chỉnh sửa sản phẩm</string>
+    <string name="delete_product">Xóa sản phẩm</string>
+    <string name="order_summary_empty">Tổng: 0 đơn hàng</string>
+    <string name="order_summary">Tổng: %1$d đơn hàng</string>
+    <string name="error_create_directory">Không thể tạo thư mục để lưu PDF</string>
+    <string name="success_save_pdf">Đã lưu Bill vào thư mục %1$s!</string>
+    <string name="error_export_pdf">Lỗi khi xuất PDF: %1$s</string>
+</resources>

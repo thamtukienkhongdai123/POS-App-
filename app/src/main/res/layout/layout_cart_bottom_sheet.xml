@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bottom_sheet_bg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <View
+            android:layout_width="40dp"
+            android:layout_height="4dp"
+            android:layout_gravity="center_horizontal"
+            android:background="#DCDCDC"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="THANH TOÁN ĐƠN HÀNG"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="#333333"/>
+
+        <!-- Customer Info Section -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Thông tin khách hàng"
+            android:textSize="12sp"
+            android:textColor="#757575"
+            android:textStyle="bold"/>
+
+        <EditText
+            android:id="@+id/etCustomerNameBS"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/input_bg"
+            android:hint="Họ tên khách hàng"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/etCustomerPhoneBS"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/input_bg"
+            android:hint="Số điện thoại"
+            android:inputType="phone"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:textSize="14sp" />
+
+        <!-- Cart Items List -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Sản phẩm đã chọn"
+            android:textSize="12sp"
+            android:textColor="#757575"
+            android:textStyle="bold"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvCartBottomSheet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:minHeight="100dp"
+            android:nestedScrollingEnabled="false" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#F0F0F0"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Voucher Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <EditText
+                android:id="@+id/etVoucherBS"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:background="@drawable/input_bg"
+                android:hint="Mã voucher"
+                android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+                android:textSize="12sp" />
+            <Button
+                android:id="@+id/btnApplyVoucherBS"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginStart="8dp"
+                android:text="Áp Dụng"
+                android:textSize="11sp" />
+        </LinearLayout>
+
+        <!-- Payment Method Section -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="PHƯƠNG THỨC THANH TOÁN"
+            android:textColor="#757575"
+            android:textSize="10sp" />
+
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/togglePaymentMethodBS"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:checkedButton="@+id/btnCashBS"
+            app:singleSelection="true">
+            <Button
+                android:id="@+id/btnCashBS"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:text="Tiền Mặt"
+                android:textSize="11sp" />
+            <Button
+                android:id="@+id/btnTransferBS"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:text="Chuyển Khoản"
+                android:textSize="11sp" />
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+
+        <!-- Totals Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="TỔNG CỘNG"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/tvTotalBS"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0đ"
+                android:textColor="#1976D2"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCheckoutBottomSheet"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="24dp"
+            android:text="HOÀN TẤT THANH TOÁN"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:backgroundTint="#1976D2"
+            app:cornerRadius="12dp"/>
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

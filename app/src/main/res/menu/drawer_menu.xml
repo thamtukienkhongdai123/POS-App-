@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_sale"
+            android:icon="@android:drawable/ic_menu_add"
+            android:title="Bán Hàng" />
+        <item
+            android:id="@+id/nav_dashboard"
+            android:icon="@android:drawable/ic_menu_today"
+            android:title="Bảng Điều Khiển" />
+        <item
+            android:id="@+id/nav_products"
+            android:icon="@android:drawable/ic_menu_gallery"
+            android:title="Sản Phẩm" />
+        <item
+            android:id="@+id/nav_orders"
+            android:icon="@android:drawable/ic_menu_recent_history"
+            android:title="Lịch Sử Đơn Hàng" />
+        <item
+            android:id="@+id/nav_customers"
+            android:icon="@android:drawable/ic_menu_myplaces"
+            android:title="Khách Hàng" />
+        <item
+            android:id="@+id/nav_stock"
+            android:icon="@android:drawable/ic_menu_manage"
+            android:title="Quản Lý Tồn Kho" />
+        <item
+            android:id="@+id/nav_discounts"
+            android:icon="@android:drawable/ic_menu_send"
+            android:title="Mã Giảm Giá" />
+
+        <item
+            android:id="@+id/nav_logs"
+            android:icon="@android:drawable/ic_menu_info_details"
+            android:title="Nhật Ký Hoạt Động" />
+        <item
+            android:id="@+id/nav_returns"
+            android:icon="@android:drawable/ic_menu_revert"
+            android:title="Hoàn Hàng" />
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@android:drawable/ic_menu_preferences"
+            android:title="Cài Đặt" />
+    </group>
+</menu>

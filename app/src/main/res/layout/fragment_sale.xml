@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F8F9FB">
+
+    <!-- Search bar -->
+    <EditText
+        android:id="@+id/etSearchSale"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_margin="12dp"
+        android:background="@drawable/search_bg"
+        android:drawableStart="@android:drawable/ic_menu_search"
+        android:drawablePadding="12dp"
+        android:hint="Tìm kiếm sản phẩm..."
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:textSize="14sp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Categories -->
+    <HorizontalScrollView
+        android:id="@+id/scrollFilters"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:scrollbars="none"
+        app:layout_constraintTop_toBottomOf="@+id/etSearchSale">
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipGroupFilters"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            app:singleSelection="true">
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipAll"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="Tất cả" />
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipNam"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nam" />
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipNu"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nữ" />
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipUnisex"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Unisex" />
+        </com.google.android.material.chip.ChipGroup>
+    </HorizontalScrollView>
+
+    <!-- Product Grid -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvProductSelection"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:paddingLeft="6dp"
+        android:paddingRight="6dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottomCartSummary"
+        app:layout_constraintTop_toBottomOf="@+id/scrollFilters"
+        tools:listitem="@layout/item_product_grid" />
+
+    <!-- Bottom Summary -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/bottomCartSummary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardElevation="16dp"
+        app:layout_constraintBottom_toBottomOf="parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="16dp"
+            android:gravity="center_vertical">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/tvTotal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0đ"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:textColor="#1976D2"/>
+            </LinearLayout>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnViewCart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="XEM GIỎ HÀNG"
+                app:cornerRadius="8dp" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Hidden components for code compatibility in Portrait mode -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        tools:ignore="MissingConstraints">
+        <EditText android:id="@+id/etCustomerName" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="" />
+        <EditText android:id="@+id/etCustomerPhone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="" />
+        <androidx.recyclerview.widget.RecyclerView android:id="@+id/rvCart" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+        <com.google.android.material.button.MaterialButtonToggleGroup android:id="@+id/togglePaymentMethod" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+        <com.google.android.material.button.MaterialButton android:id="@+id/btnCheckout" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+        <TextView android:id="@+id/tvSubtotal" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+        <ImageButton android:id="@+id/btnClearCart" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+        <LinearLayout android:id="@+id/layoutEmptyCart" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+        <EditText android:id="@+id/etVoucher" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
