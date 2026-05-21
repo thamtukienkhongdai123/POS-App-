@@ -1,22 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F7FA"
-    android:orientation="vertical">
+    android:background="#F8FAFC">
 
-    <!-- Header Stats (Inspired by Web Dashboard) -->
-    <androidx.cardview.widget.CardView
+    <!-- Header Background -->
+    <View
+        android:id="@+id/headerBg"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="#6366F1"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Summary Card -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cvOrderSummary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
         app:cardCornerRadius="16dp"
-        app:cardElevation="8dp">
+        app:cardElevation="6dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:strokeWidth="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_vertical"
             android:orientation="horizontal"
             android:padding="20dp">
 
@@ -40,38 +54,41 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:text="Tổng: 0 đơn hàng"
-                    android:textColor="#757575"
-                    android:textSize="12sp" />
+                    android:textColor="#94A3B8"
+                    android:textSize="14sp" />
             </LinearLayout>
 
             <ImageView
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:src="@android:drawable/ic_menu_recent_history"
-                app:tint="#1976D2" />
+                app:tint="#6366F1" />
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 
-    <FrameLayout
+    <!-- Orders List -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvOrders"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_marginTop="12dp"
+        android:clipToPadding="false"
+        android:paddingBottom="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cvOrderSummary"
+        tools:listitem="@layout/item_order" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvOrders"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:paddingBottom="16dp" />
+    <TextView
+        android:id="@+id/tvEmptyOrders"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Chưa có đơn hàng nào"
+        android:textColor="#94A3B8"
+        android:textSize="16sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cvOrderSummary" />
 
-        <TextView
-            android:id="@+id/tvEmptyOrders"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Chưa có đơn hàng nào"
-            android:textColor="#BDBDBD"
-            android:textSize="16sp"
-            android:visibility="gone" />
-    </FrameLayout>
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

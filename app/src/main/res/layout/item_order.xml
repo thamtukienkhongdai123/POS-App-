@@ -9,78 +9,177 @@
     android:layout_marginBottom="8dp"
     app:cardCornerRadius="8dp">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:padding="16dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <!-- Order Icon -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/iconContainer"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            app:cardBackgroundColor="#F1F5F9"
+            app:cardCornerRadius="12dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:strokeWidth="0dp">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="12dp"
+                android:src="@android:drawable/ic_menu_agenda"
+                app:tint="#6366F1" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Order ID & Date -->
+        <TextView
+            android:id="@+id/tvOrderId"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/tvOrderId"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="#ORD-3768"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tvStatus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="#E8F5E9"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp"
-                android:text="HOÀN TẤT"
-                android:textColor="#2E7D32"
-                android:textSize="10sp" />
-        </LinearLayout>
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
+            android:text="#ORD-3768"
+            android:textColor="#1E293B"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@id/tvStatus"
+            app:layout_constraintStart_toEndOf="@id/iconContainer"
+            app:layout_constraintTop_toTopOf="@id/iconContainer" />
 
         <TextView
             android:id="@+id/tvDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="2dp"
             android:text="16 Jan 2026 22:13"
-            android:textColor="#757575"
-            android:textSize="12sp" />
+            android:textColor="#94A3B8"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@id/tvOrderId"
+            app:layout_constraintTop_toBottomOf="@id/tvOrderId" />
 
+        <!-- Status Badge -->
         <TextView
-            android:id="@+id/tvCustomer"
+            android:id="@+id/tvStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Khách hàng: Khách Vãng Lai" />
+            android:background="@drawable/badge_bg"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            android:text="HOÀN TẤT"
+            android:textColor="#6366F1"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvOrderId" />
 
+        <!-- Divider -->
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="16dp"
+            android:background="#F1F5F9"
+            app:layout_constraintTop_toBottomOf="@id/iconContainer" />
+
+        <!-- Info Section -->
         <LinearLayout
+            android:id="@+id/llCustomerInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:orientation="horizontal">
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/divider">
 
-            <TextView
-                android:id="@+id/tvTotal"
+            <!-- Customer -->
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="290.000đ"
-                android:textColor="#2E7D32"
-                android:textStyle="bold" />
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Khách hàng"
+                    android:textColor="#94A3B8"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvCustomer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Khách vãng lai"
+                    android:textColor="#475569"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/tvCustomerPhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="0987654321"
+                    android:textColor="#64748B"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <!-- Total Amount -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:gravity="end"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tổng thanh toán"
+                    android:textColor="#94A3B8"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvTotal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="3,500,000đ"
+                    android:textColor="#10B981"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Actions -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="end"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/llCustomerInfo">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnExportPdf"
                 style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Xuất PDF"
-                app:icon="@android:drawable/ic_menu_save" />
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:padding="8dp"
+                android:text="XUẤT PDF"
+                android:textColor="#6366F1"
+                android:textSize="12sp"
+                app:icon="@android:drawable/ic_menu_save"
+                app:iconSize="14dp"
+                app:iconTint="#6366F1" />
         </LinearLayout>
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

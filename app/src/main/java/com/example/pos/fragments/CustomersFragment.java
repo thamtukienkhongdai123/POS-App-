@@ -1,11 +1,14 @@
 package com.example.pos.fragments;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pos.DatabaseHelper;
+import com.example.pos.R;
 import com.example.pos.databinding.FragmentCustomersBinding;
 import com.example.pos.databinding.ItemCustomerBinding;
 import com.example.pos.models.Customer;
@@ -42,23 +46,14 @@ public class CustomersFragment extends Fragment {
         dbHelper = new DatabaseHelper(getContext());
         
         setupRecyclerView();
-        loadCustomers();
         setupSearch();
         setupButtons();
     }
 
-    private void setupButtons() {
-        binding.btnAddCustomer.setOnClickListener(v -> {
-            // TODO: Open add customer dialog
-        });
-        
-        binding.btnPrevPage.setOnClickListener(v -> {
-            // Handle pagination
-        });
-        
-        binding.btnNextPage.setOnClickListener(v -> {
-            // Handle pagination
-        });
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadCustomers();
     }
 
     private void setupRecyclerView() {
@@ -67,31 +62,50 @@ public class CustomersFragment extends Fragment {
         binding.rvCustomers.setAdapter(adapter);
     }
 
+    private void setupButtons() {
+        binding.btnAddCustomer.setOnClickListener(v -> showCustomerDialog(null));
+        
+        binding.btnPrevPage.setOnClickListener(v -> {
+            // Placeholder for pagination
+        });
+        
+        binding.btnNextPage.setOnClickListener(v -> {
+            // Placeholder for pagination
+        });
+    }
+
     private void loadCustomers() {
         allCustomers.clear();
         android.database.sqlite.SQLiteDatabase db = dbHelper.getReadableDatabase();
-        android.database.Cursor cursor = db.query(DatabaseHelper.TABLE_CUSTOMERS, null, null, null, null, null, DatabaseHelper.COLUMN_CUST_TOTAL_SPENT + " DESC");
+        android.database.Cursor cursor = db.query(DatabaseHelper.TABLE_CUSTOMERS, null, null, null, null, null, DatabaseHelper.COLUMN_CUST_ID + " DESC");
 
         double totalSpending = 0;
 
         if (cursor.moveToFirst()) {
             do {
-                String name = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_CUST_NAME));
-                String phone = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_CUST_PHONE));
-                String email = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_CUST_EMAIL));
-                String address = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_CUST_ADDRESS));
-                double spent = cursor.getDouble(cursor.getColumnIndex(DatabaseHelper.COLUMN_CUST_TOTAL_SPENT));
-                
-                // Get order count for this customer
-                int orderCount = getOrderCountForCustomer(name);
-                
-                Customer customer = new Customer(name, phone, spent);
-                customer.setOrderCount(orderCount);
-                customer.setEmail(email != null ? email : (name.toLowerCase().replace(" ", "") + "@gmail.com"));
-                customer.setAddress(address != null ? address : "Chưa cập nhật địa chỉ");
-                
-                allCustomers.add(customer);
-                totalSpending += spent;
+                int nameIdx = cursor.getColumnIndex(DatabaseHelper.COLUMN_CUST_NAME);
+                int phoneIdx = cursor.getColumnIndex(DatabaseHelper.COLUMN_CUST_PHONE);
+                int emailIdx = cursor.getColumnIndex(DatabaseHelper.COLUMN_CUST_EMAIL);
+                int addressIdx = cursor.getColumnIndex(DatabaseHelper.COLUMN_CUST_ADDRESS);
+                int spentIdx = cursor.getColumnIndex(DatabaseHelper.COLUMN_CUST_TOTAL_SPENT);
+
+                if (nameIdx != -1 && phoneIdx != -1 && emailIdx != -1 && addressIdx != -1 && spentIdx != -1) {
+                    String name = cursor.getString(nameIdx);
+                    String phone = cursor.getString(phoneIdx);
+                    String email = cursor.getString(emailIdx);
+                    String address = cursor.getString(addressIdx);
+                    double spent = cursor.getDouble(spentIdx);
+                    
+                    int orderCount = getOrderCountForCustomer(name);
+                    
+                    Customer customer = new Customer(name, phone, spent);
+                    customer.setOrderCount(orderCount);
+                    customer.setEmail(email != null ? email : (name.toLowerCase().replace(" ", "") + "@gmail.com"));
+                    customer.setAddress(address != null ? address : "Chưa cập nhật địa chỉ");
+                    
+                    allCustomers.add(customer);
+                    totalSpending += spent;
+                }
             } while (cursor.moveToNext());
         }
         cursor.close();
@@ -147,7 +161,50 @@ public class CustomersFragment extends Fragment {
     private void updateList(List<Customer> list) {
         adapter.updateData(list);
         binding.tvCustomerCountLabel.setText("Hiển thị " + list.size() + " / " + allCustomers.size() + " Khách hàng");
-        binding.tvPageNumber.setText("1"); // Simplified for now
+        binding.tvPageNumber.setText("1");
+    }
+
+    private void showCustomerDialog(@Nullable Customer customer) {
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_add_customer, null);
+        EditText etName = dialogView.findViewById(R.id.etCustName);
+        EditText etPhone = dialogView.findViewById(R.id.etCustPhone);
+        EditText etEmail = dialogView.findViewById(R.id.etCustEmail);
+        EditText etAddress = dialogView.findViewById(R.id.etCustAddress);
+
+        if (customer != null) {
+            etName.setText(customer.getName());
+            etPhone.setText(customer.getPhone());
+            etEmail.setText(customer.getEmail());
+            etAddress.setText(customer.getAddress());
+        }
+
+        new AlertDialog.Builder(getContext())
+                .setTitle(customer == null ? "Thêm khách hàng" : "Sửa khách hàng")
+                .setView(dialogView)
+                .setPositiveButton(customer == null ? "Thêm" : "Cập nhật", (dialog, which) -> {
+                    String name = etName.getText().toString().trim();
+                    String phone = etPhone.getText().toString().trim();
+                    String email = etEmail.getText().toString().trim();
+                    String address = etAddress.getText().toString().trim();
+
+                    if (name.isEmpty() || phone.isEmpty()) {
+                        Toast.makeText(getContext(), "Vui lòng nhập tên và SĐT", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    if (customer == null) {
+                        dbHelper.updateCustomer(name, phone, 0); // Reusing updateCustomer for basic insert
+                        // Since updateCustomer doesn't take email/address, we update it immediately after
+                        dbHelper.updateCustomerInfo(phone, name, phone, email, address);
+                        dbHelper.addLog(requireContext(), "Created Customer", name);
+                    } else {
+                        dbHelper.updateCustomerInfo(customer.getPhone(), name, phone, email, address);
+                        dbHelper.addLog(requireContext(), "Updated Customer", name);
+                    }
+                    loadCustomers();
+                })
+                .setNegativeButton("Hủy", null)
+                .show();
     }
 
     private class CustomerAdapter extends RecyclerView.Adapter<CustomerViewHolder> {
@@ -179,12 +236,19 @@ public class CustomersFragment extends Fragment {
             holder.binding.tvOrderCount.setText(c.getOrderCount() + " đơn");
             holder.binding.tvTotalSpent.setText(String.format(Locale.getDefault(), "%,.0fđ", c.getTotalSpent()));
             
-            holder.binding.btnEditCustomer.setOnClickListener(v -> {
-                // Handle edit
-            });
+            holder.binding.btnEditCustomer.setOnClickListener(v -> showCustomerDialog(c));
             
             holder.binding.btnDeleteCustomer.setOnClickListener(v -> {
-                // Handle delete
+                new AlertDialog.Builder(getContext())
+                        .setTitle("Xác nhận xóa")
+                        .setMessage("Xóa khách hàng " + c.getName() + "?")
+                        .setPositiveButton("Xóa", (dialog, which) -> {
+                            dbHelper.deleteCustomer(c.getPhone());
+                            dbHelper.addLog(requireContext(), "Deleted Customer", c.getName());
+                            loadCustomers();
+                        })
+                        .setNegativeButton("Hủy", null)
+                        .show();
             });
         }
 

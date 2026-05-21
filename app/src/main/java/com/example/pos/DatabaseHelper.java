@@ -575,6 +575,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return phone;
     }
 
+    public void deleteCustomer(String phone) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_CUSTOMERS, COLUMN_CUST_PHONE + "=?", new String[]{phone});
+    }
+
+    public void updateCustomerInfo(String oldPhone, String name, String newPhone, String email, String address) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_CUST_NAME, name);
+        values.put(COLUMN_CUST_PHONE, newPhone);
+        values.put(COLUMN_CUST_EMAIL, email);
+        values.put(COLUMN_CUST_ADDRESS, address);
+        db.update(TABLE_CUSTOMERS, values, COLUMN_CUST_PHONE + "=?", new String[]{oldPhone});
+    }
+
     public java.util.Map<String, Double> getMonthlyRevenue() {
         java.util.Map<String, Double> revenueData = new java.util.LinkedHashMap<>();
         SQLiteDatabase db = this.getReadableDatabase();

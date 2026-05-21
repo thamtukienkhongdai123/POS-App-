@@ -34,7 +34,6 @@ public class ProductsFragment extends Fragment implements ProductAdapter.OnProdu
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         dbHelper = new DatabaseHelper(getContext());
-        loadProducts();
 
         binding.btnAddProduct.setOnClickListener(v -> {
             AddProductDialogFragment dialog = new AddProductDialogFragment();
@@ -45,6 +44,12 @@ public class ProductsFragment extends Fragment implements ProductAdapter.OnProdu
         getParentFragmentManager().setFragmentResultListener("product_changed", getViewLifecycleOwner(), (requestKey, result) -> {
             loadProducts();
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadProducts();
     }
 
     private void loadProducts() {
@@ -74,6 +79,7 @@ public class ProductsFragment extends Fragment implements ProductAdapter.OnProdu
             .setMessage("Bạn có chắc muốn xóa sản phẩm " + product.getName() + " không?")
             .setPositiveButton("Xóa", (dialog, which) -> {
                 dbHelper.deleteProduct(product.getId());
+                dbHelper.addLog(requireContext(), "Deleted Product", product.getName());
                 loadProducts();
                 Toast.makeText(getContext(), "Đã xóa sản phẩm", Toast.LENGTH_SHORT).show();
             })

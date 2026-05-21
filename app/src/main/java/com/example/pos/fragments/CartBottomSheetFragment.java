@@ -5,10 +5,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.example.pos.DatabaseHelper;
 import com.example.pos.R;
 import com.example.pos.adapters.CartAdapter;
 import com.example.pos.databinding.LayoutCartBottomSheetBinding;
@@ -24,9 +27,11 @@ public class CartBottomSheetFragment extends BottomSheetDialogFragment {
     private List<CartItem> cartItems;
     private CartAdapter.OnCartItemChangeListener listener;
     private OnCheckoutListener checkoutListener;
+    private DatabaseHelper dbHelper;
+    private double currentDiscount = 0;
 
     public interface OnCheckoutListener {
-        void onCheckout(String name, String phone, boolean isTransfer);
+        void onCheckout(String name, String phone, boolean isTransfer, double discount);
     }
 
     public CartBottomSheetFragment(List<CartItem> cartItems, CartAdapter.OnCartItemChangeListener listener, OnCheckoutListener checkoutListener) {
@@ -45,6 +50,7 @@ public class CartBottomSheetFragment extends BottomSheetDialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        dbHelper = new DatabaseHelper(requireContext());
 
         updateTotal();
 
@@ -68,21 +74,41 @@ public class CartBottomSheetFragment extends BottomSheetDialogFragment {
         binding.rvCartBottomSheet.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.rvCartBottomSheet.setAdapter(adapter);
 
+        binding.btnApplyVoucherBS.setOnClickListener(v -> {
+            String code = binding.etVoucherBS.getText().toString().trim();
+            if (code.isEmpty()) {
+                currentDiscount = 0;
+                updateTotal();
+                return;
+            }
+
+            double discount = dbHelper.validateVoucher(code);
+            if (discount > 0) {
+                currentDiscount = discount;
+                Toast.makeText(getContext(), "Áp dụng thành công: -" + String.format(Locale.getDefault(), "%,.0fđ", discount), Toast.LENGTH_SHORT).show();
+            } else {
+                currentDiscount = 0;
+                Toast.makeText(getContext(), "Mã giảm giá không hợp lệ", Toast.LENGTH_SHORT).show();
+            }
+            updateTotal();
+        });
+
         binding.btnCheckoutBottomSheet.setOnClickListener(v -> {
             String name = binding.etCustomerNameBS.getText().toString();
             String phone = binding.etCustomerPhoneBS.getText().toString();
             boolean isTransfer = binding.togglePaymentMethodBS.getCheckedButtonId() == R.id.btnTransferBS;
             
-            checkoutListener.onCheckout(name, phone, isTransfer);
+            checkoutListener.onCheckout(name, phone, isTransfer, currentDiscount);
             dismiss();
         });
     }
 
     private void updateTotal() {
-        double total = 0;
+        double subtotal = 0;
         for (CartItem item : cartItems) {
-            total += item.getTotalPrice();
+            subtotal += item.getTotalPrice();
         }
+        double total = Math.max(0, subtotal - currentDiscount);
         binding.tvTotalBS.setText(String.format(Locale.getDefault(), "%,.0fđ", total));
     }
 }

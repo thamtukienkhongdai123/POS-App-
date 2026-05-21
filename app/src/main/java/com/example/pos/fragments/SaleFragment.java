@@ -92,13 +92,19 @@ public class SaleFragment extends Fragment implements CartAdapter.OnCartItemChan
             if (binding.togglePaymentMethod != null) {
                 isTransfer = binding.togglePaymentMethod.getCheckedButtonId() == R.id.btnTransfer;
             }
-            performCheckout(name, phone, isTransfer);
+            
+            double discount = 0;
+            if (binding.etVoucher != null && !binding.etVoucher.getText().toString().isEmpty()) {
+                discount = dbHelper.validateVoucher(binding.etVoucher.getText().toString());
+            }
+            
+            performCheckout(name, phone, isTransfer, discount);
         });
 
         if (binding.btnViewCart != null) {
             binding.btnViewCart.setOnClickListener(v -> {
                 CartBottomSheetFragment bottomSheet = new CartBottomSheetFragment(cartItems, this, 
-                    (name, phone, isTransfer) -> performCheckout(name, phone, isTransfer));
+                    (name, phone, isTransfer, discount) -> performCheckout(name, phone, isTransfer, discount));
                 bottomSheet.show(getChildFragmentManager(), "cart_bottom_sheet");
             });
         }
@@ -132,7 +138,7 @@ public class SaleFragment extends Fragment implements CartAdapter.OnCartItemChan
         binding.tvTotal.setText(totalStr);
     }
 
-    private void performCheckout(String name, String phone, boolean isTransfer) {
+    private void performCheckout(String name, String phone, boolean isTransfer, double discount) {
         if (cartItems.isEmpty()) {
             Toast.makeText(getContext(), "Vui lòng chọn sản phẩm", Toast.LENGTH_SHORT).show();
             return;
@@ -141,11 +147,6 @@ public class SaleFragment extends Fragment implements CartAdapter.OnCartItemChan
         String customerName = name.isEmpty() ? "Khách lẻ" : name;
         
         double subtotal = calculateTotal();
-        double discount = 0;
-        // Check for discount applied
-        if (binding.etVoucher != null && !binding.etVoucher.getText().toString().isEmpty()) {
-            discount = dbHelper.validateVoucher(binding.etVoucher.getText().toString());
-        }
         double total = Math.max(0, subtotal - discount);
 
         String date = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault()).format(new Date());

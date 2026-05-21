@@ -38,9 +38,21 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
         Order order = orders.get(position);
         holder.binding.tvOrderId.setText(order.getOrderId());
         holder.binding.tvDate.setText(order.getDate());
-        holder.binding.tvCustomer.setText("Khách hàng: " + order.getCustomer());
-        holder.binding.tvTotal.setText(String.format("%.0fđ", order.getTotal()));
+        holder.binding.tvCustomer.setText(order.getCustomer());
+        holder.binding.tvTotal.setText(String.format(java.util.Locale.getDefault(), "%,.0fđ", order.getTotal()));
         holder.binding.tvStatus.setText(order.getStatus());
+
+        // Load customer phone
+        com.example.pos.DatabaseHelper dbHelper = new com.example.pos.DatabaseHelper(holder.itemView.getContext());
+        String phone = dbHelper.getCustomerPhone(order.getCustomer());
+        holder.binding.tvCustomerPhone.setText(phone != null ? phone : "Không có SĐT");
+        
+        // Handle status color
+        if ("REFUNDED".equalsIgnoreCase(order.getStatus())) {
+            holder.binding.tvStatus.setTextColor(android.graphics.Color.parseColor("#EF4444"));
+        } else {
+            holder.binding.tvStatus.setTextColor(android.graphics.Color.parseColor("#10B981"));
+        }
         
         holder.binding.btnExportPdf.setOnClickListener(v -> {
             if (listener != null) {

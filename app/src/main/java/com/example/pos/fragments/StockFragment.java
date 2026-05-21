@@ -39,7 +39,6 @@ public class StockFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         dbHelper = new DatabaseHelper(getContext());
-        loadStock();
 
         binding.fabAddStock.setOnClickListener(v -> {
             AddProductDialogFragment dialog = new AddProductDialogFragment();
@@ -64,6 +63,12 @@ public class StockFragment extends Fragment {
         getParentFragmentManager().setFragmentResultListener("product_changed", getViewLifecycleOwner(), (requestKey, result) -> {
             loadStock();
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadStock();
     }
 
     private void loadStock() {

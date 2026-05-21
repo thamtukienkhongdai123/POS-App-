@@ -49,11 +49,15 @@ public class DashboardFragment extends Fragment {
         prefs = requireContext().getSharedPreferences("settings", Context.MODE_PRIVATE);
         taxPercent = prefs.getFloat("tax_percent", 10f);
 
-        loadStats();
-        setupChart();
-
         binding.btnEditTax.setOnClickListener(v -> showTaxEditDialog());
         binding.cvTax.setOnClickListener(v -> showTaxEditDialog());
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadStats();
+        setupChart();
     }
 
     private void showTaxEditDialog() {

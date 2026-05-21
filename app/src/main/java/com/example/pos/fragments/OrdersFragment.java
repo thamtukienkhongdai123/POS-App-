@@ -49,8 +49,13 @@ public class OrdersFragment extends Fragment implements OrderAdapter.OnItemClick
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         dbHelper = new DatabaseHelper(requireContext());
-        loadOrders();
         checkPermissions();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadOrders();
     }
 
     private void checkPermissions() {

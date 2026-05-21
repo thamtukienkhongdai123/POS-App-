@@ -41,8 +41,13 @@ public class LogsFragment extends Fragment {
         dbHelper = new DatabaseHelper(getContext());
         
         setupRecyclerView();
-        loadLogs();
         setupSearch();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadLogs();
     }
 
     private void setupRecyclerView() {

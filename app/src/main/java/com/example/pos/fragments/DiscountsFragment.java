@@ -46,12 +46,17 @@ public class DiscountsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         dbHelper = new DatabaseHelper(getContext());
         
-        loadVouchers();
         setupSearch();
 
         binding.btnShowAddVoucherDialog.setOnClickListener(v -> {
             showAddVoucherDialog();
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadVouchers();
     }
 
     private void setupSearch() {

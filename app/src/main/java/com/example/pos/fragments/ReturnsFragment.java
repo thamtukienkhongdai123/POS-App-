@@ -45,8 +45,13 @@ public class ReturnsFragment extends Fragment {
         dbHelper = new DatabaseHelper(getContext());
         
         setupRecyclerView();
-        loadOrders();
         setupSearch();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadOrders();
     }
 
     private void setupRecyclerView() {
